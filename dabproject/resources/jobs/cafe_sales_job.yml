@@ -1,0 +1,47 @@
+resources:
+  jobs:
+    cafe_sales:
+      name: cafe_sales
+      tasks:
+        - task_key: cafe_sales_ingestion
+          notebook_task:
+            notebook_path: ../../src/notebooks/cafe_sales_ingestion.ipynb
+            source: WORKSPACE
+        - task_key: cafe_sales_staging
+          depends_on:
+            - task_key: cafe_sales_ingestion
+          sql_task:
+            file:
+              path: ../../src/sql/cafe_sales_staging.sql
+              source: WORKSPACE
+            warehouse_id: 25c91c595ffc9574
+        - task_key: cafe_sales_hub
+          depends_on:
+            - task_key: cafe_sales_staging
+          sql_task:
+            file:
+              path: ../../src/sql/cafe_sales_hub.sql
+              source: WORKSPACE
+            warehouse_id: 25c91c595ffc9574
+      queue:
+        enabled: true
+      parameters:
+        - name: landing_path
+          default: ${var.landing_path}
+
+        - name: archive_path
+          default: ${var.archive_path}
+
+        - name: catalog_name
+          default: ${var.catalog_name}
+
+        - name: bronze_schema_name
+          default: ${var.bronze_schema_name}
+
+        - name: silver_schema_name
+          default: ${var.silver_schema_name}
+
+        - name: gold_schema_name
+          default: ${var.gold_schema_name}
+      performance_target: PERFORMANCE_OPTIMIZED
+

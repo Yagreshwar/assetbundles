@@ -1,0 +1,32 @@
+# This is a Databricks asset bundle definition for dabproject.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: dabproject
+  uuid: 1f865261-4e65-42e4-a559-ce4241d39918
+
+include:
+  - resources/*.yml
+  - resources/*/*.yml
+  - targets.yml
+
+# Variable declarations. These variables are assigned in the dev/prod targets below.
+variables:
+  catalog_name:
+    description: The catalog to use
+
+  landing_path:
+    description: Landing path
+
+  archive_path:
+    description: Archive path
+
+  bronze_schema_name:
+    description: Bronze schema
+
+  silver_schema_name:
+    description: Silver schema
+
+  gold_schema_name:
+    description: Gold schema
+    
+
